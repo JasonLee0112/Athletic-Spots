@@ -9,6 +9,15 @@ declare module "@remix-run/node" {
 }
 
 export default defineConfig({
+  server: {
+    port: 5173,
+    hmr: {
+      // Force the HMR websocket to use the same port
+      host: 'localhost',
+      port: 5173,
+      protocol: 'ws'
+    }
+  },
   plugins: [
     remix({
       future: {
