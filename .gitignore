@@ -4,3 +4,6 @@ node_modules
 /build
 .env
 public/placeholder.png
+public/searchIcon.svg
+public/userIcon.png
+public/favicon.ico

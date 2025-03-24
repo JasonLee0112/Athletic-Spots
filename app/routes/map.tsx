@@ -13,11 +13,11 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export default function Upload() {
+export default function Map() {
   return (
     <div>
       <HeadNavigationBar />
-      <div>This is the upload page!</div>
+      <div>This is the map page!</div>
     </div>
   );
 }
