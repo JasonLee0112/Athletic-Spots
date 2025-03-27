@@ -11,6 +11,10 @@ body {
   }
 }
 
+.underlined {
+  text-decoration-line: underline;
+}
+
 .no-border{
   border: 0 ;
   box-shadow: none;

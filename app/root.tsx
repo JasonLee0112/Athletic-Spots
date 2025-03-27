@@ -27,7 +27,7 @@ export function links() {
   ];
 }
 
-let userLoggedIn = true;
+let userLoggedIn = false;
 
 // If logged in, display profile
 // If not logged in, display log-in system
@@ -37,7 +37,7 @@ export function HeadNavigationBar() {
   return (
     <Navbar key="false" expand="false" className="bg-body-tertiary">
       <Container fluid>
-        <Navbar.Brand href="#home" className="me-3 align-center">
+        <Navbar.Brand href="/" className="me-3 align-center">
           <img
             alt=""
             src="/placeholder.png"
@@ -48,13 +48,13 @@ export function HeadNavigationBar() {
           <p className="d-inline-block align-middle">Athletic Spots</p>
         </Navbar.Brand>
         <Nav className="me-auto d-flex flex-row">
-          <Nav.Link className="me-3" href="#map">
+          <Nav.Link className="me-3" href="map">
             Maps
           </Nav.Link>
-          <Nav.Link className="me-3" href="#contact">
+          <Nav.Link className="me-3" href="contact">
             Contact
           </Nav.Link>
-          <Nav.Link className="me-3" href="#about">
+          <Nav.Link className="me-3" href="about">
             About Us
           </Nav.Link>
         </Nav>
@@ -64,7 +64,7 @@ export function HeadNavigationBar() {
               placeholder="Search"
               className="no-border"
             ></Form.Control>
-            <Button variant="outline-light" type="button">
+            <Button variant="outline-light" type="button" href="search">
               <img
                 className="search-icon"
                 src="searchIcon.svg"
@@ -111,10 +111,15 @@ export function HeadNavigationBar() {
           </>
         ) : (
           <ButtonGroup size="sm">
-            <Button type="button" variant="outline-success" className="">
+            <Button type="button" variant="outline-success" href="/login">
               "Sign In"
             </Button>
-            <Button type="button" variant="outline-dark" className="me-3">
+            <Button
+              type="button"
+              variant="outline-dark"
+              className="me-3"
+              href="/register"
+            >
               "Register"
             </Button>
           </ButtonGroup>
@@ -124,16 +129,26 @@ export function HeadNavigationBar() {
   );
 }
 
+export function LoginNavigator() {
+  return (
+    <Navbar key="false" expand="false" className="bg-body-tertiary">
+      <Button type="button" variant="outline-danger" href="/" className="ms-2">
+        Back
+      </Button>
+    </Navbar>
+  );
+}
+
 export default function App() {
   return (
-    <html lang="en">
+    <html lang="en" className="bg-light">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="bg-light">
         <Outlet />
         <ScrollRestoration />
         <Scripts />
