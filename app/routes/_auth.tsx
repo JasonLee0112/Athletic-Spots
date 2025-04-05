@@ -7,6 +7,8 @@ import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import CardGroup from "react-bootstrap/CardGroup";
 
+import { Map } from "react-bootstrap-icons";
+
 export const meta: MetaFunction = () => {
   return [
     { title: "Athletic Spots" },
@@ -32,7 +34,7 @@ export default function Auth() {
             <h1 style={{ fontSize: "250%" }}>
               <b> Welcome! </b>
             </h1>
-            <img src="placeholder.png" width="50%" height="50%"></img>
+            <Map style={{ width: "50%", height: "50%" }}></Map>
           </Card>
           <Card className="bg-body-tertiary text-black w-100">
             <Outlet />

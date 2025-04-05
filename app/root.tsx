@@ -40,7 +40,7 @@ export function HeadNavigationBar() {
         <Navbar.Brand href="/" className="me-3 align-center">
           <img
             alt=""
-            src="/placeholder.png"
+            src="/NavBarLogo.png"
             width="30"
             height="30"
             className="d-inline-block align-middle me-2"
