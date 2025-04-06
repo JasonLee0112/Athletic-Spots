@@ -3,6 +3,8 @@ node_modules
 /.cache
 /build
 .env
+test-user.ts
+Registercopy.tsx
 public/placeholder.png
 public/NavBarLogo.png
 public/searchIcon.svg
