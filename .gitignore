@@ -5,6 +5,7 @@ node_modules
 .env
 test-user.ts
 Registercopy.tsx
+public/default-profile-image.jpg
 public/placeholder.png
 public/NavBarLogo.png
 public/searchIcon.svg

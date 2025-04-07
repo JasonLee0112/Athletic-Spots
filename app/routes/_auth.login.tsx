@@ -69,14 +69,14 @@ export default function Login() {
         style={{ paddingTop: 50 }}
       >
         {/* Show success or error message if we have actionData */}
-        {actionData && (
-          <Alert
-            variant={actionData.success ? "success" : "danger"}
-            className="mb-4"
-          >
-            {actionData.message}
-          </Alert>
-        )}
+        {/* {actionData && (
+      //     <Alert
+      //       variant={actionData.success ? "success" : "danger"}
+      //       className="mb-4"
+      //     >
+      //       {actionData.message}
+      //     </Alert>
+      //   )} */}
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formGroupEmail">
             <Form.Label>Email</Form.Label>
@@ -125,7 +125,7 @@ export default function Login() {
 import { data } from "@remix-run/react";
 import { connectToDatabase } from "~/utils/server/db.server";
 import { authenticateUser } from "~/utils/server/auth.server";
-// import { createUserSession } from "~/utils/server/session.server";
+import { createUserSession } from "~/utils/server/session.server";
 
 export const action: ActionFunction = async ({
   request,
@@ -133,7 +133,7 @@ export const action: ActionFunction = async ({
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
-  const redirectTo = (formData.get("redirectTo") as String) || "/";
+  const redirectTo = (formData.get("redirectTo") as string) || "/";
 
   if (typeof email !== "string" || typeof password !== "string") {
     return data<ActionData>(
@@ -166,10 +166,11 @@ export const action: ActionFunction = async ({
       );
     }
 
-    return data<ActionData>({
-      success: true,
-      message: `Login successful! Found user with email: ${email}`,
-    });
+    // return data<ActionData>({
+    //   success: true,
+    //   message: `Login successful! Found user with email: ${email}`,
+    // });
+    return createUserSession(user._id.toString(), redirectTo);
   } catch (error) {
     console.error("Login error: ", error);
     return data<ActionData>(

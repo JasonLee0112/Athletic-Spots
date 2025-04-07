@@ -33,10 +33,14 @@ export async function getUserSession(request: Request) {
 export async function getLoggedInUser(request: Request) {
   const session = await getUserSession(request);
   const userId = session.get("userId");
-  if (!userId) return null;
-
+  if (!userId) {
+    console.log("No UserID provided!");
+    return null;
+  }
   try {
+    console.log("trying to find userID...");
     const user = await UserModel.findById(userId);
+    user ? console.log("User found!") : console.log("No Users Found!");
     return user;
   } catch {
     return null;
@@ -50,6 +54,26 @@ export async function createUserSession(userId: string, redirectTo: string) {
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await sessionStorage.commitSession(session),
+    },
+  });
+}
+
+export async function logoutAction(request: Request) {
+  const session = await getUserSession(request);
+  
+  // Get the referer header to know where to redirect back to
+  const referer = request.headers.get("Referer") || "/";
+  const url = new URL(referer);
+  
+  // If we're already on a protected page that requires login,
+  // redirect to home instead to avoid a redirect loop
+  const redirectTo = url.pathname.includes("/profile") || 
+                     url.pathname.includes("/settings") ? 
+                     "/" : url.pathname;
+  
+  return redirect(redirectTo, {
+    headers: {
+      "Set-Cookie": await sessionStorage.destroySession(session),
     },
   });
 }
