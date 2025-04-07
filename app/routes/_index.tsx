@@ -16,7 +16,6 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div>
-      <HeadNavigationBar />
       <div>This is the index page!</div>
     </div>
   );

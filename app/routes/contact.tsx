@@ -16,7 +16,6 @@ export const meta: MetaFunction = () => {
 export default function Contactr() {
   return (
     <div>
-      <HeadNavigationBar />
       <div>This is the contact us page!</div>
     </div>
   );

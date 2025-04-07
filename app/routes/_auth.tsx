@@ -23,7 +23,6 @@ export const meta: MetaFunction = () => {
 export default function Auth() {
   return (
     <>
-      <LoginNavigator></LoginNavigator>
       <Container
         fluid
         className="d-flex justify-content-center align-items-center lg px-5 pb-5"

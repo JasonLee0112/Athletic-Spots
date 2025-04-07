@@ -16,7 +16,6 @@ export const meta: MetaFunction = () => {
 export default function Administrative() {
   return (
     <div>
-      <HeadNavigationBar />
       <div>This is the Admin page!</div>
     </div>
   );

@@ -16,7 +16,6 @@ export const meta: MetaFunction = () => {
 export default function Search() {
   return (
     <div>
-      <HeadNavigationBar />
       <div>This is the search page!</div>
     </div>
   );

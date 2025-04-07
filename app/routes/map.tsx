@@ -16,7 +16,6 @@ export const meta: MetaFunction = () => {
 export default function Map() {
   return (
     <div>
-      <HeadNavigationBar />
       <div>This is the map page!</div>
     </div>
   );

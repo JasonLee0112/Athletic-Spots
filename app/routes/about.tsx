@@ -16,7 +16,6 @@ export const meta: MetaFunction = () => {
 export default function About() {
   return (
     <div>
-      <HeadNavigationBar />
       <div>This is the About Us page!</div>
     </div>
   );

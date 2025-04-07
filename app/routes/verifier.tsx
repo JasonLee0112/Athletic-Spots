@@ -16,7 +16,6 @@ export const meta: MetaFunction = () => {
 export default function Verifier() {
   return (
     <div>
-      <HeadNavigationBar />
       <div>This is the verifier page!</div>
     </div>
   );
