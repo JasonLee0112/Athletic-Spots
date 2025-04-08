@@ -56,6 +56,43 @@ export async function authenticateUser(email: string, password: string) {
     return isValid ? user : null;
 }
 
+export async function checkIfUserExists(email: string, username: string) {
+    await connectToDatabase();
+    
+    //Find user by email
+    console.log("Searching for email");
+    const userEmail = await UserModel.findOne({ email });
+    const userName = await UserModel.findOne({ username });
+
+    if(!userEmail && !userName){
+        return null;
+    }
+    else {
+        return userEmail ? userEmail : userName;
+    }
+
+}
+
+export async function registerPlainUser(username: string, email: string, passwordHash: string){
+    UserModel.create({
+          username,
+          email,
+          credentials: {
+            passwordHash,
+            lastChanged: new Date(),
+          },
+          profile: {
+            joinDate: new Date(),
+          },
+          permissions: {
+            level: "User",
+          },
+          meta: {
+            accountStatus: "Active",
+          },
+        });
+}
+
 // /**
 //  * Register a new user with hashed credentials
 //  * 
