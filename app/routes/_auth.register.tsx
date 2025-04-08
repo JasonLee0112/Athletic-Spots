@@ -254,9 +254,12 @@ export default function Register() {
                 validation.length &&
                 validation.number &&
                 validation.special &&
-                validation.noSpace &&
+                !validation.noSpace &&
                 confirmPassword &&
-                isSubmitting
+                passwordTouched &&
+                confirmEmailTouched
+                  ? false
+                  : true
               }
             >
               {isSubmitting ? "Signing up..." : "Sign Up"}
