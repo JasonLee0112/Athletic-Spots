@@ -20,19 +20,19 @@ class Review implements ReviewType {
   @prop({ required: true, ref: () => User })
   public userId!: string;
 
-  @prop({ required: true, min: 1, max: 5 })
+  @prop({ required: true, min: 1, max: 5, type: Number })
   public rating!: number;
 
-  @prop()
+  @prop({ type: String })
   public reviewText?: string;
 
-  @prop({ default: Date.now })
+  @prop({ default: Date.now, type: Date })
   public datePosted?: Date;
 
-  @prop({ default: 0 })
+  @prop({ default: 0 , type: Number })
   public helpful?: number;
 
-  @prop({ default: 0 })
+  @prop({ default: 0, type: Number })
   public notHelpful?: number;
 }
 
@@ -53,19 +53,19 @@ class GeoPoint {
 }
 
 class Address {
-  @prop()
+  @prop({ type: String })
   public street?: string;
 
-  @prop()
+  @prop({ type: String })
   public city?: string;
 
-  @prop()
+  @prop({ type: String })
   public state?: string;
 
-  @prop()
+  @prop({ type: String })
   public zipCode?: string;
 
-  @prop()
+  @prop({ type: String })
   public country?: string;
 }
 
@@ -82,26 +82,26 @@ class Location implements ObjectLocation {
   @prop({ type: () => Address })
   public address?: Address;
 
-  @prop()
+  @prop({ type: String })
   public googlePlaceId?: string;
 }
 
 class Access implements AccessInfo {
-  @prop({ default: true })
+  @prop({ default: true, type: Boolean })
   public isPublic?: boolean;
 
-  @prop({ default: false })
+  @prop({ default: false, type: Boolean })
   public isRestricted?: boolean;
 
-  @prop()
+  @prop({ type: String })
   public restrictionDetails?: string;
 }
 
 class DailyHour implements DailyHours {
-  @prop()
+  @prop({ type: String })
   public open?: string;
 
-  @prop()
+  @prop({ type: String })
   public close?: string;
 }
 
@@ -129,21 +129,21 @@ class RegularHour implements RegularHours {
 }
 
 class HolidayHour implements HolidayHours {
-  @prop({ required: true })
+  @prop({ required: true, type: Date })
   public date!: Date;
 
-  @prop()
+  @prop({ type: String })
   public open?: string;
 
-  @prop()
+  @prop({ type: String })
   public close?: string;
 
-  @prop()
+  @prop({ type: String })
   public isClosed?: boolean;
 }
 
 class Hours implements SpotHours {
-  @prop({ default: false })
+  @prop({ default: false, type: Boolean })
   public is24Hours?: boolean;
 
   @prop({ type: () => RegularHour })
@@ -154,32 +154,32 @@ class Hours implements SpotHours {
 }
 
 class Verification implements VerificationInfo {
-  @prop({ default: false })
+  @prop({ default: false, type: Boolean })
   public isVerified?: boolean;
 
   @prop({ ref: () => User })
   public verifiedBy?: string;
 
-  @prop()
+  @prop({ type: Date })
   public verificationDate?: Date;
 
-  @prop()
+  @prop({ type: String })
   public verificationNotes?: string;
 }
 
 class Ratings implements RatingsSummary {
-  @prop({ default: 0 })
+  @prop({ default: 0, type: Number })
   public average?: number;
 
-  @prop({ default: 0 })
+  @prop({ default: 0, type: Number })
   public count?: number;
 }
 
 class Metadata implements ObjectMetadata {
-  @prop({ default: Date.now })
+  @prop({ default: Date.now, type: Date })
   public dateCreated?: Date;
 
-  @prop()
+  @prop({ type: Date })
   public lastUpdated?: Date;
 
   @prop({ ref: () => User })

@@ -69,14 +69,14 @@ export default function Login() {
         style={{ paddingTop: 50 }}
       >
         {/* Show success or error message if we have actionData */}
-        {/* {actionData && (
-      //     <Alert
-      //       variant={actionData.success ? "success" : "danger"}
-      //       className="mb-4"
-      //     >
-      //       {actionData.message}
-      //     </Alert>
-      //   )} */}
+        {actionData && (
+          <Alert
+            variant={actionData.success ? "success" : "danger"}
+            className="mb-4"
+          >
+            {actionData.message}
+          </Alert>
+        )}
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formGroupEmail">
             <Form.Label>Email</Form.Label>
@@ -135,6 +135,11 @@ export const action: ActionFunction = async ({
   const password = formData.get("password");
   const redirectTo = (formData.get("redirectTo") as string) || "/";
 
+  const ipAddress =
+    request.headers.get("X-Forwarded-For") ||
+    request.headers.get("CF-Connecting-IP") ||
+    "Unknown";
+
   if (typeof email !== "string" || typeof password !== "string") {
     return data<ActionData>(
       {
@@ -157,7 +162,7 @@ export const action: ActionFunction = async ({
 
   try {
     await connectToDatabase();
-    const user = await authenticateUser(email, password);
+    const user = await authenticateUser(email, password, ipAddress as string);
 
     if (!user) {
       return data<ActionData>(

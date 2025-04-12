@@ -2,9 +2,13 @@ node_modules
 
 /.cache
 /build
-.env
-test-user.ts
+
+/app/scripts
+client-error.tsx
 Registercopy.tsx
+jest.config.cjs
+
+.env
 public/default-profile-image.jpg
 public/placeholder.png
 public/NavBarLogo.png

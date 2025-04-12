@@ -8,6 +8,8 @@ import {
   data,
   useLocation,
   useSubmit,
+  useRouteError,
+  isRouteErrorResponse,
 } from "@remix-run/react";
 
 import { LoaderFunctionArgs } from "@remix-run/node";
@@ -26,6 +28,9 @@ import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { User } from "./models/types/user.types";
 import { useEffect } from "react";
+import { logError } from "./models/server/error.model.server";
+import { Alert } from "react-bootstrap";
+import { getErrorType } from "./routes/api.log-error";
 
 export function links() {
   return [
@@ -52,6 +57,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return data({ user: serializedUser });
   } catch (error) {
     console.error("Error in root loader: ", error);
+
+    await logError(error, request);
+
     return data({ user: null });
   }
 };
@@ -64,8 +72,8 @@ export function HeadNavigationBar({ user }: any) {
   const userLoggedIn = !!user;
   const submit = useSubmit();
 
-  console.log("HeadNavigationBar rendering with user:", user);
-  console.log("userLoggedIn value:", userLoggedIn);
+  // console.log("HeadNavigationBar rendering with user:", user);
+  // console.log("userLoggedIn value:", userLoggedIn);
 
   const handleLogout = (event: any) => {
     event.preventDefault();
@@ -196,12 +204,93 @@ export function LoginNavigator() {
     </Navbar>
   );
 }
+export function ErrorBoundary() {
+  const error: any = useRouteError();
+  const isRouteError = isRouteErrorResponse(error);
+
+  // Log client-side errors to console
+  useEffect(() => {
+    if (isRouteError) {
+      if (error.status === 404) {
+        console.log(`404 error:`);
+      } else {
+        console.error(`Route error ${error.status}: ${error.statusText}`);
+      }
+    } else {
+      console.error("Client-side error:", error);
+
+      if (!isRouteError) {
+        // If we have access to the window object, we can log this to the server
+        if (typeof window !== "undefined") {
+          // Create a simple POST request to log the error
+          const errorMessage = error.message || "Application error";
+          const errorType = getErrorType(error);
+          fetch("/api/log-error", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              message: errorMessage,
+              stack: error.stack,
+              type: errorType,
+              url: window.location.href,
+            }),
+          }).catch((err) => {
+            console.error("Failed to log error to server:", err);
+          });
+        }
+      }
+    }
+  }, [error, isRouteError]);
+
+  return (
+    <html lang="en" className="bg-light">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <Links />
+        <title>Error - Athletic Spots</title>
+      </head>
+      <body className="bg-light">
+        <Container className="py-5">
+          <Alert variant="danger">
+            <Alert.Heading>
+              {isRouteError
+                ? `${error.status} ${error.statusText}`
+                : "An unexpected error occurred"}
+            </Alert.Heading>
+            <p>
+              {isRouteError
+                ? error.status === 404
+                  ? "The page you're looking for doesn't exist."
+                  : error.data
+                : "Our team has been notified of this issue."}
+            </p>
+            <hr />
+            <div className="d-flex justify-content-end">
+              <Button
+                variant="outline-danger"
+                onClick={() => (window.location.href = "/")}
+              >
+                Return Home
+              </Button>
+            </div>
+          </Alert>
+        </Container>
+        <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  );
+}
 
 export default function App() {
   const { user } = useLoaderData<{ user: User }>();
   const location = useLocation();
 
-  console.log("App component loaded with user data:", user);
+  // console.log("App component loaded with user data:", user);
 
   const isAuthPage =
     location.pathname.includes("/login") ||
