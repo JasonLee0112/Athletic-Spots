@@ -35,8 +35,7 @@
     "reflect-metadata": "^0.2.2",
     "selenium-webdriver": "^4.31.0",
     "ts-jest": "^29.3.1",
-    "tsx": "^4.19.3",
-    "typegoose": "^5.9.1"
+    "tsx": "^4.19.3"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.16.1",
