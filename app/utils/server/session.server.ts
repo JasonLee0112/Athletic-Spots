@@ -1,11 +1,9 @@
-import {
-    createCookieSessionStorage,
-} from "@remix-run/node"
-import { redirect } from "@remix-run/react"
-
-import mongoose from "mongoose";
+import { createCookieSessionStorage } from "@remix-run/node";
+import { redirect } from "@remix-run/react";
 
 import { UserModel } from "~/models/server/users.server";
+
+import { randomBytes } from "crypto";
 
 type ActionData = {
   success: boolean;
@@ -17,7 +15,7 @@ const sessionStorage = createCookieSessionStorage({
     name: "user_session",
     secure: process.env.NODE_ENV === "production",
     secrets: [process.env.SESSION_SECRET || "default-secret-key"],
-    sameSite: "lax",
+    sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
     path: "/",
     maxAge: 60 * 60 * 24 * 30, // 30 days
     httpOnly: true,
@@ -60,17 +58,18 @@ export async function createUserSession(userId: string, redirectTo: string) {
 
 export async function logoutAction(request: Request) {
   const session = await getUserSession(request);
-  
+
   // Get the referer header to know where to redirect back to
   const referer = request.headers.get("Referer") || "/";
   const url = new URL(referer);
-  
+
   // If we're already on a protected page that requires login,
   // redirect to home instead to avoid a redirect loop
-  const redirectTo = url.pathname.includes("/profile") || 
-                     url.pathname.includes("/settings") ? 
-                     "/" : url.pathname;
-  
+  const redirectTo =
+    url.pathname.includes("/profile") || url.pathname.includes("/settings")
+      ? "/"
+      : url.pathname;
+
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await sessionStorage.destroySession(session),

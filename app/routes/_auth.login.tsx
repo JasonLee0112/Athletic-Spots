@@ -3,15 +3,8 @@ import {
   ActionFunctionArgs,
   type MetaFunction,
 } from "@remix-run/node";
-import {
-  Link,
-  Form as RemixForm,
-  useActionData,
-  useSubmit,
-} from "@remix-run/react";
-
-import { User } from "~/models/types/user.types";
-
+import { Link, useActionData, useSubmit } from "@remix-run/react";
+import { useSearchParams } from "@remix-run/react";
 import { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
@@ -38,6 +31,8 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [searchParams] = useSearchParams();
+  const resetSuccess = searchParams.get("reset") === "success";
 
   const actionData = useActionData<ActionData>();
   const submit = useSubmit();
@@ -77,6 +72,12 @@ export default function Login() {
             {actionData.message}
           </Alert>
         )}
+        {resetSuccess && (
+          <Alert variant="success">
+            Your password has been reset successfully. You can now log in with
+            your new password.
+          </Alert>
+        )}
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formGroupEmail">
             <Form.Label>Email</Form.Label>
@@ -104,7 +105,7 @@ export default function Login() {
             </Button>
           </div>
           <div className="mb-2">
-            <Link to="/" className="underlined">
+            <Link to="/forgot_password" className="underlined">
               Forgot password?
             </Link>
           </div>

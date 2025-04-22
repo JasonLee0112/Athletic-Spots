@@ -1,15 +1,22 @@
-import "reflect-metadata"
-import { prop, getModelForClass, modelOptions, Severity, index, Ref } from "@typegoose/typegoose";
-import type { 
-  User as UserType, 
-  UserCredentials, 
-  UserProfile, 
+import "reflect-metadata";
+import {
+  prop,
+  getModelForClass,
+  modelOptions,
+  Severity,
+  index,
+  Ref,
+} from "@typegoose/typegoose";
+import type {
+  User as UserType,
+  UserCredentials,
+  UserProfile,
   UserAddress,
-  UserProfileImage, 
+  UserProfileImage,
   UserPermissions,
   UserMeta,
   PermissionLevel,
-  AccountStatus
+  AccountStatus,
 } from "../types/user.types";
 import "../../../app/utils/server/db.server.ts";
 
@@ -74,10 +81,10 @@ class ProfileImage implements UserProfileImage {
 }
 
 class Permissions implements UserPermissions {
-  @prop({ 
-    type: String, 
+  @prop({
+    type: String,
     enum: ["User", "VerifiedUser", "Administrator"],
-    default: "User" 
+    default: "User",
   })
   public level?: PermissionLevel;
 
@@ -92,9 +99,9 @@ class Meta implements UserMeta {
   @prop({ type: Date })
   public lastActive?: Date;
 
-  @prop({ 
-    type: String, 
-    enum: ["Active", "Suspended", "Deactivated"] 
+  @prop({
+    type: String,
+    enum: ["Active", "Suspended", "Deactivated"],
   })
   public accountStatus?: AccountStatus;
 
@@ -103,14 +110,14 @@ class Meta implements UserMeta {
 }
 
 // Main User model with compound indexes for unique username and email
-@modelOptions({ 
-  schemaOptions: { 
+@modelOptions({
+  schemaOptions: {
     timestamps: true,
-    collection: 'users'
-  }, 
-  options: { 
-    allowMixed: Severity.ALLOW 
-  } 
+    collection: "users",
+  },
+  options: {
+    allowMixed: Severity.ALLOW,
+  },
 })
 @index({ username: 1 }, { unique: true })
 @index({ email: 1 }, { unique: true })

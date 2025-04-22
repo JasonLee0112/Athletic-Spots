@@ -31,6 +31,8 @@ import { useEffect } from "react";
 import { logError } from "./models/server/error.model.server";
 import { Alert } from "react-bootstrap";
 import { getErrorType } from "./routes/api.log-error";
+import { Search } from "react-bootstrap-icons";
+import { connectToDatabase } from "~/utils/server/db.server";
 
 export function links() {
   return [
@@ -43,7 +45,6 @@ export function links() {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {
-    const { connectToDatabase } = await import("~/utils/server/db.server");
     await connectToDatabase();
 
     console.log("Database connected, checking for user session");
@@ -115,14 +116,8 @@ export function HeadNavigationBar({ user }: any) {
               placeholder="Search"
               className="no-border"
             ></Form.Control>
-            <Button variant="outline-light" type="button" href="search">
-              <img
-                className="search-icon"
-                src="searchIcon.svg"
-                alt="search"
-                width="20"
-                height="20"
-              ></img>
+            <Button variant="light" type="button" href="search">
+              <Search></Search>
             </Button>
           </InputGroup>
         </Form>
@@ -234,7 +229,7 @@ export function ErrorBoundary() {
               message: errorMessage,
               stack: error.stack,
               type: errorType,
-              url: window.location.href,
+              url: window.location,
             }),
           }).catch((err) => {
             console.error("Failed to log error to server:", err);
@@ -295,7 +290,8 @@ export default function App() {
   const isAuthPage =
     location.pathname.includes("/login") ||
     location.pathname.includes("/register") ||
-    location.pathname.includes("/forgot_password");
+    location.pathname.includes("/forgot_password") ||
+    location.pathname.includes("/reset_password");
 
   // useEffect(() => {
   //   console.log("App useEffect - user data:", user);
