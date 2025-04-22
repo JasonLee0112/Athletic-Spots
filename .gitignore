@@ -2,11 +2,13 @@ node_modules
 
 /.cache
 /build
-
+/app/tests
 /app/scripts
 client-error.tsx
 Registercopy.tsx
-jest.config.cjs
+jest.*
+babel.*
+/coverage
 
 .env
 public/default-profile-image.jpg
