@@ -15,10 +15,7 @@ import {
   useSubmit,
 } from "@remix-run/react";
 import { useState, useEffect } from "react";
-import Form from "react-bootstrap/Form";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import Alert from "react-bootstrap/Alert";
+import { Alert, Button, Form, Card } from "react-bootstrap";
 import { resetPassword } from "~/utils/server/auth.server";
 import { connectToDatabase } from "~/utils/server/db.server";
 import { UserModel } from "~/models/server/users.server";

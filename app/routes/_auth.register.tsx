@@ -4,18 +4,14 @@ import { useState, useEffect } from "react";
 import { data, redirect } from "@remix-run/node";
 import { Link, useActionData, useSubmit } from "@remix-run/react";
 
-import Card from "react-bootstrap/Card";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import { EyeSlash, Eye } from "react-bootstrap-icons";
-import InputGroup from "react-bootstrap/InputGroup";
 import { connectToDatabase } from "~/utils/server/db.server";
 import {
   checkIfUserExists,
   hashPassword,
   registerPlainUser,
 } from "~/utils/server/auth.server";
-import { Alert } from "react-bootstrap";
+import { Alert, InputGroup, Card, Form, Button } from "react-bootstrap";
 
 export const meta: MetaFunction = () => {
   return [

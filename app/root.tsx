@@ -15,17 +15,19 @@ import {
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { getLoggedInUser } from "./utils/server/session.server";
 
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
+import {
+  Form,
+  InputGroup,
+  ButtonGroup,
+  Container,
+  Nav,
+  Navbar,
+  NavDropdown,
+  Button,
+  Offcanvas,
+} from "react-bootstrap";
 
 import "./tailwind.css";
-import Button from "react-bootstrap/Button";
-import Offcanvas from "react-bootstrap/Offcanvas";
 import { User } from "./models/types/user.types";
 import { useEffect } from "react";
 import { logError } from "./models/server/error.model.server";
@@ -173,7 +175,7 @@ export function HeadNavigationBar({ user }: any) {
         ) : (
           <ButtonGroup size="sm">
             <Button type="button" variant="outline-success" href="/login">
-              "Sign In"
+              Sign In
             </Button>
             <Button
               type="button"
@@ -181,7 +183,7 @@ export function HeadNavigationBar({ user }: any) {
               className="me-3"
               href="/register"
             >
-              "Register"
+              Register
             </Button>
           </ButtonGroup>
         )}

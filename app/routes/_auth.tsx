@@ -3,9 +3,7 @@ import { Outlet } from "@remix-run/react";
 
 import { LoginNavigator } from "~/root";
 
-import Card from "react-bootstrap/Card";
-import Container from "react-bootstrap/Container";
-import CardGroup from "react-bootstrap/CardGroup";
+import { Card, Container, CardGroup } from "react-bootstrap";
 
 import { Map } from "react-bootstrap-icons";
 

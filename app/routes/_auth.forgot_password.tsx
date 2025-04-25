@@ -8,10 +8,7 @@ import {
 } from "@remix-run/node";
 import { useActionData, useSubmit } from "@remix-run/react";
 import React, { ReactEventHandler, useEffect, useState } from "react";
-import Card from "react-bootstrap/Card";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import Alert from "react-bootstrap/Alert";
+import { Alert, Button, Card, Form } from "react-bootstrap";
 import { generatePasswordResetToken } from "~/utils/server/auth.server";
 import { sendPasswordResetEmail } from "~/utils/server/email.server";
 import { connectToDatabase } from "~/utils/server/db.server";

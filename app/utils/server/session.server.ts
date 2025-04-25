@@ -10,6 +10,11 @@ type ActionData = {
   message: string;
 };
 
+const DURATION = {
+  regular: 60 * 60 * 24 * 7, // One week
+  extended: 60 * 60 * 24 * 30, // One month
+};
+
 const sessionStorage = createCookieSessionStorage({
   cookie: {
     name: "user_session",
@@ -17,7 +22,7 @@ const sessionStorage = createCookieSessionStorage({
     secrets: [process.env.SESSION_SECRET || "default-secret-key"],
     sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
     path: "/",
-    maxAge: 60 * 60 * 24 * 30, // 30 days
+    maxAge: DURATION.regular, // 30 days
     httpOnly: true,
   },
 });
@@ -46,12 +51,17 @@ export async function getLoggedInUser(request: Request) {
 }
 
 // Create a new user session
-export async function createUserSession(userId: string, redirectTo: string) {
+export async function createUserSession(
+  userId: string,
+  redirectTo: string,
+  sessionExtend: boolean = false
+) {
   const session = await sessionStorage.getSession();
   session.set("userId", userId);
+  const maxAge = sessionExtend ? DURATION.extended : DURATION.regular;
   return redirect(redirectTo, {
     headers: {
-      "Set-Cookie": await sessionStorage.commitSession(session),
+      "Set-Cookie": await sessionStorage.commitSession(session, { maxAge }),
     },
   });
 }
