@@ -12,7 +12,6 @@ import {
   isRouteErrorResponse,
 } from "@remix-run/react";
 
-import { LoaderFunctionArgs } from "@remix-run/node";
 import { getLoggedInUser } from "./utils/server/session.server";
 
 import {
@@ -27,7 +26,6 @@ import {
   Offcanvas,
 } from "react-bootstrap";
 
-import "./tailwind.css";
 import { User } from "./models/types/user.types";
 import { useEffect } from "react";
 import { logError } from "./models/server/error.model.server";
@@ -36,14 +34,6 @@ import { getErrorType } from "./routes/api.log-error";
 import { Search } from "react-bootstrap-icons";
 import { connectToDatabase } from "~/utils/server/db.server";
 
-export function links() {
-  return [
-    {
-      rel: "stylesheet",
-      href: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css",
-    },
-  ];
-}
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {
@@ -89,9 +79,13 @@ export function HeadNavigationBar({ user }: any) {
   };
 
   return (
-    <Navbar key="false" expand="false" className="bg-body-tertiary">
+    <Navbar
+      key="false"
+      expand="false"
+      className="bg-body-tertiary border-bottom"
+    >
       <Container fluid>
-        <Navbar.Brand href="/" className="me-3 align-center">
+        <Navbar.Brand href="/" className="d-flex me-3 align-items-center">
           <img
             alt=""
             src="/NavBarLogo.png"
@@ -111,6 +105,11 @@ export function HeadNavigationBar({ user }: any) {
           <Nav.Link className="me-3" href="about">
             About Us
           </Nav.Link>
+          {userLoggedIn ? (
+            <Nav.Link className="me-3" href="upload">
+              Know a Spot?
+            </Nav.Link>
+          ) : null}
         </Nav>
         <Form className="me-3">
           <InputGroup className="search-container">
