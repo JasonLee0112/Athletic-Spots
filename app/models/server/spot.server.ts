@@ -1,15 +1,21 @@
-import { prop, getModelForClass, modelOptions, Severity, index, Ref } from "@typegoose/typegoose";
-import type { 
+import {
+  prop,
+  getModelForClass,
+  modelOptions,
+  Severity,
+  index,
+  Ref,
+} from "@typegoose/typegoose";
+import type {
   GeospatialObject,
   ObjectLocation,
   AccessInfo,
   SpotHours,
   RegularHours,
   DailyHours,
-  HolidayHours,
   VerificationInfo,
   RatingsSummary,
-  ObjectMetadata
+  ObjectMetadata,
 } from "../types/spot.types";
 import { Review as ReviewType } from "../types/review.types";
 import { User } from "./users.server";
@@ -29,7 +35,7 @@ class Review implements ReviewType {
   @prop({ default: Date.now, type: Date })
   public datePosted?: Date;
 
-  @prop({ default: 0 , type: Number })
+  @prop({ default: 0, type: Number })
   public helpful?: number;
 
   @prop({ default: 0, type: Number })
@@ -38,16 +44,16 @@ class Review implements ReviewType {
 
 // Classes for nested document structures
 class GeoPoint {
-  @prop({ 
-    type: String, 
-    enum: ['Point'],
-    default: 'Point'
+  @prop({
+    type: String,
+    enum: ["Point"],
+    default: "Point",
   })
   public type?: string;
 
-  @prop({ 
+  @prop({
     type: [Number],
-    required: true
+    required: true,
   })
   public coordinates!: number[];
 }
@@ -72,7 +78,7 @@ class Address {
 class Location implements ObjectLocation {
   @prop({
     type: () => GeoPoint,
-    _id: false
+    _id: false,
   })
   public type?: "Point";
 
@@ -128,29 +134,12 @@ class RegularHour implements RegularHours {
   public sunday?: DailyHour;
 }
 
-class HolidayHour implements HolidayHours {
-  @prop({ required: true, type: Date })
-  public date!: Date;
-
-  @prop({ type: String })
-  public open?: string;
-
-  @prop({ type: String })
-  public close?: string;
-
-  @prop({ type: String })
-  public isClosed?: boolean;
-}
-
 class Hours implements SpotHours {
   @prop({ default: false, type: Boolean })
   public is24Hours?: boolean;
 
   @prop({ type: () => RegularHour })
   public regularHours?: RegularHour;
-
-  @prop({ type: () => [HolidayHour] })
-  public holidayHours?: HolidayHour[];
 }
 
 class Verification implements VerificationInfo {
@@ -187,14 +176,14 @@ class Metadata implements ObjectMetadata {
 }
 
 // Main Object model with spatial index
-@modelOptions({ 
-  schemaOptions: { 
+@modelOptions({
+  schemaOptions: {
     timestamps: true,
-    collection: 'objects'
-  }, 
-  options: { 
-    allowMixed: Severity.ALLOW 
-  } 
+    collection: "objects",
+  },
+  options: {
+    allowMixed: Severity.ALLOW,
+  },
 })
 @index({ "location.coordinates": "2dsphere" })
 export class LocationData implements GeospatialObject {
@@ -204,9 +193,9 @@ export class LocationData implements GeospatialObject {
   @prop({ required: true })
   public description!: string;
 
-  @prop({ 
+  @prop({
     required: true,
-    type: () => Location 
+    type: () => Location,
   })
   public location!: Location;
 
@@ -237,17 +226,21 @@ export async function getObjectById(id: string) {
   return ObjectModel.findById(id);
 }
 
-export async function getObjectsByLocation(lng: number, lat: number, maxDistance: number = 10000) {
+export async function getObjectsByLocation(
+  lng: number,
+  lat: number,
+  maxDistance: number = 10000
+) {
   return ObjectModel.find({
     location: {
       $near: {
         $geometry: {
           type: "Point",
-          coordinates: [lng, lat]
+          coordinates: [lng, lat],
         },
-        $maxDistance: maxDistance
-      }
-    }
+        $maxDistance: maxDistance,
+      },
+    },
   });
 }
 
@@ -255,20 +248,26 @@ export async function createObject(objectData: LocationData) {
   return ObjectModel.create(objectData);
 }
 
-export async function addReviewToObject(objectId: string, reviewData: ReviewType) {
+export async function addReviewToObject(
+  objectId: string,
+  reviewData: ReviewType
+) {
   return ObjectModel.findByIdAndUpdate(
     objectId,
-    { 
+    {
       $push: { reviews: reviewData },
-      $inc: { "ratings.count": 1 }
+      $inc: { "ratings.count": 1 },
     },
     { new: true }
-  ).then(object => {
+  ).then((object) => {
     // Update average rating
     if (object && object.reviews && object.reviews.length > 0) {
-      const total = object.reviews.reduce((sum, review) => sum + review.rating, 0);
+      const total = object.reviews.reduce(
+        (sum, review) => sum + review.rating,
+        0
+      );
       const average = total / object.reviews.length;
-      
+
       return ObjectModel.findByIdAndUpdate(
         objectId,
         { "ratings.average": average },
