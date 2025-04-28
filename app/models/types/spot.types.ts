@@ -1,9 +1,9 @@
 import type { Review } from "./review.types";
 
-export interface GeoLocation {
-  type?: "Point";
-  coordinates: number[];  // [longitude, latitude]
-}
+// export interface GeoLocation {
+//   type?: "Point";
+//   coordinates: number[]; // [longitude, latitude]
+// }
 
 export interface Address {
   street?: string;
@@ -15,7 +15,7 @@ export interface Address {
 
 export interface ObjectLocation {
   type?: "Point";
-  coordinates: number[];  // [longitude, latitude]
+  coordinates: number[]; // [longitude, latitude]
   address?: Address;
   googlePlaceId?: string;
 }

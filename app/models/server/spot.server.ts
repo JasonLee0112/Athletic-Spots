@@ -19,7 +19,7 @@ import type {
 } from "../types/spot.types";
 import { Review as ReviewType } from "../types/review.types";
 import { User } from "./users.server";
-import "../../../utils/server/db.server";
+import "../../utils/server/db.server";
 
 // Review as a subdocument class
 class Review implements ReviewType {
@@ -43,20 +43,20 @@ class Review implements ReviewType {
 }
 
 // Classes for nested document structures
-class GeoPoint {
-  @prop({
-    type: String,
-    enum: ["Point"],
-    default: "Point",
-  })
-  public type?: string;
+// class GeoPoint {
+//   @prop({
+//     type: String,
+//     enum: ["Point"],
+//     default: "Point",
+//   })
+//   public type?: string;
 
-  @prop({
-    type: [Number],
-    required: true,
-  })
-  public coordinates!: number[];
-}
+//   @prop({
+//     type: [Number],
+//     required: true,
+//   })
+//   public coordinates!: number[];
+// }
 
 class Address {
   @prop({ type: String })
@@ -77,8 +77,9 @@ class Address {
 
 class Location implements ObjectLocation {
   @prop({
-    type: () => GeoPoint,
-    _id: false,
+    type: String,
+    enum: ["Point"],
+    default: "Point",
   })
   public type?: "Point";
 
@@ -179,7 +180,7 @@ class Metadata implements ObjectMetadata {
 @modelOptions({
   schemaOptions: {
     timestamps: true,
-    collection: "objects",
+    collection: "spots",
   },
   options: {
     allowMixed: Severity.ALLOW,
@@ -187,10 +188,10 @@ class Metadata implements ObjectMetadata {
 })
 @index({ "location.coordinates": "2dsphere" })
 export class LocationData implements GeospatialObject {
-  @prop({ required: true })
+  @prop({ required: true, type: String })
   public name!: string;
 
-  @prop({ required: true })
+  @prop({ required: true, type: String })
   public description!: string;
 
   @prop({

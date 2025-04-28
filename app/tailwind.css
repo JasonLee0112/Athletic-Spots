@@ -9,18 +9,27 @@ body {
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+  height: 100%;
+}
+
+GoogleMap {
+  height: 100%;
+}
+
+.content-area {
+  height: calc(100vh - 60px);
 }
 
 .underlined {
   text-decoration-line: underline;
 }
 
-.no-border{
-  border: 0 ;
+.no-border {
+  border: 0;
   box-shadow: none;
 }
 
-.no-border:focus{
+.no-border:focus {
   box-shadow: none;
   border-color: #ced4da;
   border-left: none;
@@ -33,11 +42,11 @@ body {
 .search-icon-container {
   background-color: white;
   border-right: none;
-  padding-right:0;
+  padding-right: 0;
 }
 
 .search-icon {
-  border:0;
+  border: 0;
 }
 
 .search-input:focus {
