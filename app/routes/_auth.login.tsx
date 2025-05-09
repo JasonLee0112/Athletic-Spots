@@ -78,7 +78,12 @@ export const action: ActionFunction = async ({
     //   success: true,
     //   message: `Login successful! Found user with email: ${email}`,
     // });
-    return createUserSession(user._id.toString(), redirectTo, sessionExtend);
+    return createUserSession(
+      user._id.toString(),
+      user.permissions!.level!.toString(),
+      redirectTo,
+      sessionExtend
+    );
   } catch (error) {
     console.error("Login error: ", error);
     return data<ActionData>(

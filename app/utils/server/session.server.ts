@@ -3,18 +3,12 @@ import { redirect } from "@remix-run/react";
 
 import { UserModel } from "~/models/server/users.server";
 
-import { randomBytes } from "crypto";
-
-type ActionData = {
-  success: boolean;
-  message: string;
-};
-
 const DURATION = {
   regular: 60 * 60 * 24 * 7, // One week
   extended: 60 * 60 * 24 * 30, // One month
 };
 
+// TODO: Figure out how to create SESSION_SECRET to be a secure secret
 const sessionStorage = createCookieSessionStorage({
   cookie: {
     name: "user_session",
@@ -22,7 +16,7 @@ const sessionStorage = createCookieSessionStorage({
     secrets: [process.env.SESSION_SECRET || "default-secret-key"],
     sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
     path: "/",
-    maxAge: DURATION.regular, // 30 days
+    maxAge: DURATION.regular,
     httpOnly: true,
   },
 });
@@ -53,11 +47,14 @@ export async function getLoggedInUser(request: Request) {
 // Create a new user session
 export async function createUserSession(
   userId: string,
+  role: string,
   redirectTo: string,
   sessionExtend: boolean = false
 ) {
   const session = await sessionStorage.getSession();
   session.set("userId", userId);
+  session.set("userRole", role);
+  // console.log(role);
   const maxAge = sessionExtend ? DURATION.extended : DURATION.regular;
   return redirect(redirectTo, {
     headers: {

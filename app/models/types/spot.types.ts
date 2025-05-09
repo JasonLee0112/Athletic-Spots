@@ -1,10 +1,5 @@
 import type { Review } from "./review.types";
 
-// export interface GeoLocation {
-//   type?: "Point";
-//   coordinates: number[]; // [longitude, latitude]
-// }
-
 export interface Address {
   street?: string;
   city?: string;
@@ -73,7 +68,7 @@ export interface ObjectMetadata {
 }
 
 export interface GeospatialObject {
-  id?: string;
+  _id?: string;
   name: string;
   description: string;
   location: ObjectLocation;

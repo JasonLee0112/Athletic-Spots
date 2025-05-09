@@ -10,6 +10,7 @@ import {
   useSubmit,
   useRouteError,
   isRouteErrorResponse,
+  Link,
 } from "@remix-run/react";
 
 import { LoaderFunctionArgs } from "@remix-run/node";
@@ -29,7 +30,7 @@ import {
 
 import "./tailwind.css";
 import { User } from "./models/types/user.types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { logError } from "./models/server/error.model.server";
 import { Alert } from "react-bootstrap";
 import { getErrorType } from "./routes/api.log-error";
@@ -74,6 +75,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export function HeadNavigationBar({ user }: any) {
   const userLoggedIn = !!user;
   const submit = useSubmit();
+  const [showOffcanvas, setShowOffcanvas] = useState(false);
 
   // console.log("HeadNavigationBar rendering with user:", user);
   // console.log("userLoggedIn value:", userLoggedIn);
@@ -86,6 +88,10 @@ export function HeadNavigationBar({ user }: any) {
         action: "/logout",
       });
     }
+  };
+
+  const handleLinkClick = () => {
+    setShowOffcanvas(false);
   };
 
   return (
@@ -106,17 +112,17 @@ export function HeadNavigationBar({ user }: any) {
           <p className="d-inline-block align-middle">Athletic Spots</p>
         </Navbar.Brand>
         <Nav className="me-auto d-flex flex-row">
-          <Nav.Link className="me-3" href="map">
+          <Nav.Link className="me-3" href="/map">
             Maps
           </Nav.Link>
-          <Nav.Link className="me-3" href="contact">
+          <Nav.Link className="me-3" href="/contact">
             Contact
           </Nav.Link>
-          <Nav.Link className="me-3" href="about">
+          <Nav.Link className="me-3" href="/about">
             About Us
           </Nav.Link>
           {userLoggedIn ? (
-            <Nav.Link className="me-3" href="upload">
+            <Nav.Link className="me-3" href="/upload">
               Know a Spot?
             </Nav.Link>
           ) : null}
@@ -127,7 +133,7 @@ export function HeadNavigationBar({ user }: any) {
               placeholder="Search"
               className="no-border"
             ></Form.Control>
-            <Button variant="light" type="button" href="search">
+            <Button variant="light" type="button" href="/search">
               <Search></Search>
             </Button>
           </InputGroup>
@@ -135,10 +141,15 @@ export function HeadNavigationBar({ user }: any) {
         {userLoggedIn ? (
           <>
             {/* This toggle button will control the offcanvas */}
-            <Navbar.Toggle aria-controls="navbar-nav" className="me-3">
+            <Navbar.Toggle
+              aria-controls="navbar-nav"
+              className="me-3"
+              onClick={() => setShowOffcanvas(!showOffcanvas)}
+            >
               <img
                 src={
-                  user.profileImage?.imageUrl || "/default-profile-image.jpg"
+                  `/api/profileImage/${user._id}?t=${new Date().getTime()}` ||
+                  "/default-profile-image.jpg"
                 }
                 height="30"
                 width="30"
@@ -146,7 +157,11 @@ export function HeadNavigationBar({ user }: any) {
               ></img>
             </Navbar.Toggle>
             {/* This component will become an offcanvas on smaller screens */}
-            <Navbar.Offcanvas id="navbar-nav" placement="end">
+            <Navbar.Offcanvas
+              show={showOffcanvas}
+              id="navbar-nav"
+              placement="end"
+            >
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title id="offcanvasNavbarLabel-expand-false">
                   {user.username || "User Profile"}
@@ -165,13 +180,30 @@ export function HeadNavigationBar({ user }: any) {
                   >
                     Profile
                   </Nav.Link>
-                  <Nav.Link href="/settings">Settings</Nav.Link>
+                  <Nav.Link
+                    as={Link}
+                    to={`/profile/${user._id}`}
+                    href={`/profile/${user._id}`}
+                    state={{ activeTab: "settings" }}
+                    onClick={handleLinkClick}
+                  >
+                    Settings
+                  </Nav.Link>
                   <NavDropdown
                     title="More"
                     id="offcanvasNavbarDropdown-expand-false"
                   >
-                    <NavDropdown.Item href="#action3">...</NavDropdown.Item>
-                    <NavDropdown.Item href="#action4">...</NavDropdown.Item>
+                    {(user.permissions.level === "VerifiedUser" ||
+                      user.permissions.level === "Administrator") && (
+                      <NavDropdown.Item href={`/profile/verifier/${user._id}`}>
+                        Verification Requests
+                      </NavDropdown.Item>
+                    )}
+                    {user.permissions.level === "Administrator" && (
+                      <NavDropdown.Item href="/administrative">
+                        Admin Dashboard
+                      </NavDropdown.Item>
+                    )}
                     <NavDropdown.Divider />
                     <NavDropdown.Item onClick={handleLogout}>
                       Logout

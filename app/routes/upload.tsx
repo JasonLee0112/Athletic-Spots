@@ -673,6 +673,7 @@ const PoiMarkers = (props: { poi: Poi }) => {
   );
 };
 
+// TODO: Implement input sanitization into the system to make sure there's no risk of Reflected XSS or Stored XSS
 export const action = async ({ request }: ActionFunctionArgs) => {
   if (request.method !== "POST") {
     return Response.json(

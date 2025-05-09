@@ -73,8 +73,11 @@ class Profile implements UserProfile {
 }
 
 class ProfileImage implements UserProfileImage {
-  @prop({ default: "default-profile-image.jpg", type: String })
-  public imageUrl?: string;
+  @prop({ type: Buffer })
+  image?: Buffer;
+
+  @prop({ type: String })
+  contentType?: string;
 
   @prop({ type: Date })
   public lastUpdated?: Date;
@@ -162,4 +165,22 @@ export async function createUser(userData: UserType) {
 
 export async function updateUser(id: string, updates: Partial<UserType>) {
   return UserModel.findByIdAndUpdate(id, updates, { new: true });
+}
+
+export async function updateProfileImage(
+  userId: string,
+  imageBuffer: Buffer,
+  contentType: string
+) {
+  return UserModel.findByIdAndUpdate(
+    userId,
+    {
+      profileImage: {
+        image: imageBuffer,
+        contentType: contentType,
+        lastUpdated: new Date(),
+      },
+    },
+    { new: true }
+  );
 }

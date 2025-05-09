@@ -20,6 +20,7 @@ import type {
 import { Review as ReviewType } from "../types/review.types";
 import { User } from "./users.server";
 import "../../utils/server/db.server";
+import { connectToDatabase } from "../../utils/server/db.server";
 
 // Review as a subdocument class
 class Review implements ReviewType {
@@ -225,6 +226,14 @@ export const ObjectModel = getModelForClass(LocationData);
 // Server-side operations
 export async function getObjectById(id: string) {
   return ObjectModel.findById(id);
+}
+
+export async function getObjectByCreatedUser(userId: string) {
+  await connectToDatabase();
+  const spots = ObjectModel.find({ "metadata.lastUpdatedBy": userId }).sort({
+    "metadata.lastUpdated": -1,
+  });
+  return spots;
 }
 
 export async function getObjectsByLocation(

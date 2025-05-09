@@ -1,6 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-
-import { HeadNavigationBar } from "~/root";
+import { useParams } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -14,9 +13,11 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Verifier() {
+  const { userId } = useParams();
+
   return (
     <div>
-      <div>This is the verifier page!</div>
+      <div>This is the verifier page for user: {userId}!</div>
     </div>
   );
 }
